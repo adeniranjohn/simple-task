@@ -15,7 +15,13 @@ export class UsersController {
   }
 
   @Get()
-  getUsers() {}
+  async getUsers() {
+    try {
+      return await this.userService.getUsers();
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 
   @Get(':userId')
   getAUSer(userId: string) {}
