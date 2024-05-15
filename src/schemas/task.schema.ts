@@ -1,4 +1,4 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from './user.schema';
 import mongoose from 'mongoose';
 
@@ -45,3 +45,5 @@ export class Task {
   })
   status: Status;
 }
+
+export const TaskSchema = SchemaFactory.createForClass(Task);
