@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
-import { UserDTO } from './dto/user.dto';
-import { UpdatesDTO } from './dto/updates.dto';
+import { UserDTO } from './dtos/user.dto';
+import { UpdatesDTO } from './dtos/updates.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -29,11 +29,12 @@ export class UsersService {
 
   async getAUser(userId: string) {
     try {
-      return await this.userModel.findById(userId);
+      return await this.userModel.findById(userId).select('-password');
     } catch (error) {
       throw new Error(error.message);
     }
   }
+
 
   async updateUser(userId: string, updates: UpdatesDTO) {
     try {
