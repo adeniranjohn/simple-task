@@ -22,14 +22,14 @@ export class AuthService {
     };
   }
 
-  async validate(email: string, password: string): Promise<IUser | null> {
+  async validate(email: string, password: string): Promise<IUser> {
     const user = await this.findByEmail(email);
     if (!user) throw new UnauthorizedException('Invalid Email/Password');
     const correct = await bcrypt.compare(password, user.password);
     if (correct) {
       return user;
     } else {
-      return null;
+      throw new UnauthorizedException('Invalid Email/Password');
     }
   }
 

@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 import { UserDTO } from './dtos/user.dto';
 import { UsersService } from './users.service';
+import { UpdateUserDTO } from './dtos/updates.dto';
 
 @Controller('api/users')
 export class UsersController {
@@ -24,8 +25,30 @@ export class UsersController {
   }
 
   @Get(':userId')
-  getAUSer(userId: string) {}
+  async getAUser(userId: string) {
+    try {
+      return await this.userService.getAUser(userId);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 
-  @Patch(':taskId')
-  updateTask(userId: string) {}
+  @Patch(':userId')
+  async updateUser(userId: string, updates: UpdateUserDTO) {
+    try {
+      return await this.userService.updateUser(userId, updates);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  //Must be an Admin
+  @Delete(':userId')
+  async deleteUser(userId: string) {
+    try {
+      return await this.userService.deleteUser(userId);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
