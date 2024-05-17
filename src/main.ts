@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as bodyParser from 'body-parser';
+import { ValidationPipe } from '@nestjs/common';
+import { ResponseInterceptor } from './response/response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -10,6 +12,9 @@ async function bootstrap() {
   app.enableCors();
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+
+  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalInterceptors(new ResponseInterceptor());
   await app.listen(3000);
 }
 bootstrap();

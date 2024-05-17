@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from './user.schema';
 import mongoose from 'mongoose';
 
-enum Status {
+export enum Status {
   TODO = 'TODO',
   IN_PROGRESS = 'IN_PROGRESS',
   DONE = 'DONE',
@@ -22,6 +22,7 @@ export class Task {
   due: Date;
 
   @Prop({
+    required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   })

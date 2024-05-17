@@ -6,5 +6,5 @@ export interface ITask {
   assignedBy: IUser;
   priority: number;
   description: string;
-  status: string;
+  status?: string;
 }

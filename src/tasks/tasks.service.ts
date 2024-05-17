@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Task } from 'src/schemas/task.schema';
+import { Status, Task } from 'src/schemas/task.schema';
 import { ITask } from './interfaces/task.interface';
 import { TaskDTO } from './dtos/task.dto';
 
@@ -20,6 +20,12 @@ export class TasksService {
     } else {
       throw new Error(`Task not found`);
     }
+  }
+
+  async updateTask(taskId: string, updates: { status: Status }) {
+    return await this.taskModel.findByIdAndUpdate(taskId, updates, {
+      new: true,
+    });
   }
 
   async createTask(task: TaskDTO) {

@@ -1,10 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/schemas/user.schema';
 import { UserDTO } from './dtos/user.dto';
 import { UpdateUserDTO } from './dtos/updates.dto';
 import * as bcrypt from 'bcrypt';
+import { IUser } from './interfaces/user.interface';
 
 @Injectable()
 export class UsersService {
@@ -27,11 +32,19 @@ export class UsersService {
     }
   }
 
-  async getAUser(userId: string) {
+  async getAUser(userId: string): Promise<IUser> {
     try {
-      return await this.userModel.findById(userId).select('-password');
+      const user: IUser | null = await this.userModel
+        .findOne({ _id: userId })
+        .select('-password');
+
+      if (user) {
+        return user;
+      } else {
+        throw new NotFoundException(`User does not exist`);
+      }
     } catch (error) {
-      throw new Error(error.message);
+      throw new BadRequestException(error.message);
     }
   }
 

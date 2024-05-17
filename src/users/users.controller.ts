@@ -1,7 +1,16 @@
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { UserDTO } from './dtos/user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDTO } from './dtos/updates.dto';
+import { IUser } from './interfaces/user.interface';
 
 @Controller('api/users')
 export class UsersController {
@@ -25,11 +34,11 @@ export class UsersController {
   }
 
   @Get(':userId')
-  async getAUser(userId: string) {
+  async getAUser(userId: string): Promise<IUser> {
     try {
       return await this.userService.getAUser(userId);
     } catch (error) {
-      throw new Error(error.message);
+      throw new NotFoundException(`User not found`);
     }
   }
 

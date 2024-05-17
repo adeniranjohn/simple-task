@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { IUser } from 'src/users/interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
@@ -34,7 +34,7 @@ export class AuthController {
       const user = body;
       return await this.userService.register(user);
     } catch (err) {
-      throw new Error(err.message);
+      throw new BadRequestException(err.message);
     }
   }
 }

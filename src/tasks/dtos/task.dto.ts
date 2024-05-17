@@ -1,10 +1,18 @@
-import { IsDate, IsEnum, IsNumber, IsString } from 'class-validator';
-import { Role, User } from 'src/schemas/user.schema';
+import {
+  IsDate,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { Status } from 'src/schemas/task.schema';
+import { User } from 'src/schemas/user.schema';
 
 export class TaskDTO {
   @IsString()
   name: string;
 
+  @IsOptional()
   @IsDate()
   due: Date;
 
@@ -17,6 +25,7 @@ export class TaskDTO {
   @IsString()
   description: string;
 
-  @IsEnum(Role)
-  status: Role;
+  @IsOptional()
+  @IsEnum(Status)
+  status: Status;
 }
