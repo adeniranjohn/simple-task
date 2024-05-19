@@ -5,20 +5,26 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { TaskDTO } from './dtos/task.dto';
 import { TasksService } from './tasks.service';
 import { Status } from 'src/schemas/task.schema';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import {
+  Payload,
+  RequestUser,
+} from 'src/users/interfaces/request.user.interface';
 
 @Controller('api/tasks')
 @UseGuards(JwtAuthGuard)
 export class TasksController {
   constructor(private tasksService: TasksService) {}
   @Post()
-  async createTask(@Body() body: TaskDTO) {
-    return await this.tasksService.createTask(body);
+  async createTask(@Body() body: TaskDTO, @Req() req: RequestUser) {
+    const user: Payload | undefined = req.user;
+    return await this.tasksService.createTask(body, user?.id);
   }
 
   @Get()

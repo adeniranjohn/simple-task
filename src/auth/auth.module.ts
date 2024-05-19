@@ -9,7 +9,7 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from 'src/auth/strategies/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { UsersService } from 'src/users/users.service';
-import { LocalStrategy } from './strategies/local.strategy';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -18,7 +18,9 @@ import { LocalStrategy } from './strategies/local.strategy';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('TOKEN_SECRET'),
-        signOptions: { expiresIn: configService.get<string>('EXPIRES_IN') },
+        signOptions: { 
+          expiresIn: configService.get<string>('EXPIRES_IN') 
+        },
       }),
     }),
 

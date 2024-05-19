@@ -28,8 +28,8 @@ export class TasksService {
     });
   }
 
-  async createTask(task: TaskDTO) {
-    return await this.taskModel.create(task);
+  async createTask(task: TaskDTO, userId: string) {
+    return await this.taskModel.create({ ...task, assignedBy: userId });
   }
 
   async deleteTask(taskId: string) {

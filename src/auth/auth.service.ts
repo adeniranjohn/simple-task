@@ -15,7 +15,12 @@ export class AuthService {
   async getToken(
     user: IUser,
   ): Promise<{ user: string | undefined; token: string }> {
-    const payload = { username: user.username, sub: user._id };
+    const payload = {
+      emal: user.email,
+      id: user._id,
+      name: user.name,
+      role: user.role,
+    };
     return {
       user: user._id,
       token: this.jwtService.sign(payload),
