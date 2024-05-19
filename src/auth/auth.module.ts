@@ -9,6 +9,7 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from 'src/auth/strategies/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { UsersService } from 'src/users/users.service';
+import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [

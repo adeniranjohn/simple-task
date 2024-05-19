@@ -6,13 +6,16 @@ import {
   NotFoundException,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UserDTO } from './dtos/user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDTO } from './dtos/updates.dto';
 import { IUser } from './interfaces/user.interface';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('api/users')
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
   @Post()

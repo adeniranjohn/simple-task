@@ -26,7 +26,7 @@ export class UsersService {
 
   async getUsers() {
     try {
-      return await this.userModel.find({});
+      return await this.userModel.find({}).select('name email role');
     } catch (error) {
       throw new Error(error.message);
     }
