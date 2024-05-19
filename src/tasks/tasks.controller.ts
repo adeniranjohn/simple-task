@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -10,12 +11,12 @@ import {
 } from '@nestjs/common';
 import { TaskDTO } from './dtos/task.dto';
 import { TasksService } from './tasks.service';
-import { Status } from 'src/schemas/task.schema';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import {
   Payload,
   RequestUser,
 } from 'src/users/interfaces/request.user.interface';
+import { UpdateTaskDTO } from './dtos/updateTask.dto';
 
 @Controller('api/tasks')
 @UseGuards(JwtAuthGuard)
@@ -40,10 +41,16 @@ export class TasksController {
 
   @Patch(':taskId')
   async updateTask(
-    @Body() updates: { status: Status },
+    @Body() updates: UpdateTaskDTO,
     @Param() param: { taskId: string },
   ) {
     const { taskId } = param;
     return await this.tasksService.updateTask(taskId, updates);
+  }
+
+  @Delete(':taskId')
+  async deleteTask(@Param() param: { taskId: string }) {
+    const { taskId } = param;
+    return await this.tasksService.deleteTask(taskId);
   }
 }

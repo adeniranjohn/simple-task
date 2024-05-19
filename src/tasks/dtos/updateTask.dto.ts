@@ -1,16 +1,18 @@
-import { IsOptional, IsString, IsDate, IsEnum } from 'class-validator';
+import { IsOptional, IsString, IsEnum, IsISO8601 } from 'class-validator';
 import { Status } from 'src/schemas/task.schema';
-import { User } from 'src/schemas/user.schema';
 
 export class UpdateTaskDTO {
   @IsOptional()
   @IsString()
-  assignedBy: User;
+  description: string;
 
-  @IsDate()
+  @IsOptional()
+  @IsISO8601({}, { message: 'Due must be in ISO 8601 format' })
   due: Date;
 
   @IsOptional()
-  @IsEnum(Status)
+  @IsEnum(Status, {
+    message: `Status must be one of the following values: ${Object.values(Status).join(', ')}`,
+  })
   status: Status;
 }

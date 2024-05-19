@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from 'src/schemas/user.schema';
+import { Role, User } from 'src/schemas/user.schema';
 import { UserDTO } from './dtos/user.dto';
 import { UpdateUserDTO } from './dtos/updates.dto';
 import * as bcrypt from 'bcrypt';
@@ -18,7 +18,11 @@ export class UsersService {
   async register(user: UserDTO) {
     try {
       const hashed = await this.hashedPassword(user.password);
-      return await this.userModel.create({ ...user, password: hashed });
+      return await this.userModel.create({
+        ...user,
+        role: Role.USER,
+        password: hashed,
+      });
     } catch (error) {
       throw new Error(error.message);
     }
@@ -36,8 +40,7 @@ export class UsersService {
     try {
       const user: IUser | null = await this.userModel
         .findOne({ _id: userId })
-        .select('-password');
-
+        .select('name email role');
       if (user) {
         return user;
       } else {

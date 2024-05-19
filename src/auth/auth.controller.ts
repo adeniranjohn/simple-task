@@ -31,8 +31,14 @@ export class AuthController {
   @Post('register')
   async register(@Body() body: UserDTO) {
     try {
-      const user = body;
-      return await this.userService.register(user);
+      const existed = await this.authService.findByEmail(body.email);
+      if (existed) {
+        throw new BadRequestException(
+          `User with email: ${body.email} already existed`,
+        );
+      } else {
+        return await this.userService.register(body);
+      }
     } catch (err) {
       throw new BadRequestException(err.message);
     }

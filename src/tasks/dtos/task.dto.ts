@@ -1,11 +1,11 @@
-import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsISO8601, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class TaskDTO {
   @IsString()
   name: string;
 
   @IsOptional()
-  @IsDate()
+  @IsISO8601({}, { message: 'Due must be in ISO 8601 format' })
   due: Date;
 
   @IsNumber()
@@ -13,5 +13,4 @@ export class TaskDTO {
 
   @IsString()
   description: string;
-
 }

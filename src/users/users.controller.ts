@@ -1,31 +1,24 @@
 import {
-  Body,
+  BadRequestException,
   Controller,
   Delete,
   Get,
   NotFoundException,
+  Param,
   Patch,
-  Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
-import { UserDTO } from './dtos/user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDTO } from './dtos/updates.dto';
 import { IUser } from './interfaces/user.interface';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RequestUser } from './interfaces/request.user.interface';
 
 @Controller('api/users')
 @UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
-  @Post()
-  async createUser(@Body() user: UserDTO) {
-    try {
-      return await this.userService.register(user);
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  }
 
   @Get()
   async getUsers() {
@@ -37,8 +30,9 @@ export class UsersController {
   }
 
   @Get(':userId')
-  async getAUser(userId: string): Promise<IUser> {
+  async getAUser(@Param() param: { userId: string }): Promise<IUser> {
     try {
+      const { userId } = param;
       return await this.userService.getAUser(userId);
     } catch (error) {
       throw new NotFoundException(`User not found`);
@@ -54,11 +48,17 @@ export class UsersController {
     }
   }
 
-  //Must be an Admin
   @Delete(':userId')
-  async deleteUser(userId: string) {
+  async deleteUser(
+    @Req() req: RequestUser,
+    @Param() param: { userId: string },
+  ) {
     try {
-      return await this.userService.deleteUser(userId);
+      if (req.user.id === param.userId) {
+        return await this.userService.deleteUser(param.userId);
+      } else {
+        throw new BadRequestException(`User can only delete itself`);
+      }
     } catch (error) {
       throw new Error(error.message);
     }

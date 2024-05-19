@@ -5,9 +5,6 @@ export class UserDTO {
   name: string;
 
   @IsString()
-  username: string;
-
-  @IsString()
   password: string;
 
   @IsEmail()

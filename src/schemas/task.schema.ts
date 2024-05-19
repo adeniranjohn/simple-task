@@ -42,7 +42,7 @@ export class Task {
   @Prop({
     required: true,
     default: Status.TODO,
-    enum: Status,
+    enum: Object.values(Status),
   })
   status: Status;
 }
