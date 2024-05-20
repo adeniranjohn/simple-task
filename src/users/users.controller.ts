@@ -40,9 +40,9 @@ export class UsersController {
   }
 
   @Patch(':userId')
-  async updateUser(userId: string, updates: UpdateUserDTO) {
+  async updateUser(@Req() req: RequestUser, updates: UpdateUserDTO) {
     try {
-      return await this.userService.updateUser(userId, updates);
+      return await this.userService.updateUser(req.user.id, updates);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -55,7 +55,7 @@ export class UsersController {
   ) {
     try {
       if (req.user.id === param.userId) {
-        return await this.userService.deleteUser(param.userId);
+        return await this.userService.deleteUser(req.user.id);
       } else {
         throw new BadRequestException(`User can only delete itself`);
       }

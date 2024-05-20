@@ -1,33 +1,34 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Simple Task Management System
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+a RESTful API for a simple task management system.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Running the App](#running-the-app)
+- [API Endpoints](#api-endpoints)
+- [WebSocket Integration](#websocket-integration)
+- [Input Validation](#input-validation)
+- [Environment Variables](#environment-variables)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
 
 ## Installation
 
+- Environment Variables
+1. Edit the content of the .env.sample at the root of the app with the details of your environment.
+2. Rename the .env.sample to .env at the rot of the folder.
+
+```
+DB_URL = mongodb://localhost:27017/simple-task // url for database
+TOKEN_SECRET = TheSecretToMyApp //app secrets jor jwt token
+EXPIRES_IN = 2000000 // expire time for json web token
+```
+
+- Open your terminal at the root of the folder to install the dependencies for the application
 ```bash
 $ npm install
 ```
@@ -45,28 +46,84 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
 
-```bash
-# unit tests
-$ npm run test
+## Data
 
-# e2e tests
-$ npm run test:e2e
+### User
+- Users can register on the platform with the below fields in the json below and comments explained the details needed
+```
+{
+    "name": "Bolaji Basia", //  Name(s) of User
+    "email": "jasolajohn@gmail.com",  // Email address of user
+    "password": "password" // Password of user
+}
+```
+### Task
 
-# test coverage
-$ npm run test:cov
+```
+{
+    "name": "UPS", // name of the task 
+    "status": "TODO" , // status of the task, its an enum within TODO, IN_PROGRESS, DONE
+    "description": "Kindly turn of the ups and start it again to understand what we are going through", // details of the task
+    "due": "2024-06-12T05:00:10.711Z" //due date of the task, by default it is 7 days after it was created
+}
 ```
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Endpoints
 
-## Stay in touch
+- By default the project is running on http://localhost:6000
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### AUTH /api - unprotected route
+
+```
+POST /api/auth/register  - Create a new user
+{
+    "name": "Bolaji Basia", //  Name(s) of User
+    "email": "jasolajohn@gmail.com",  // Email address of user
+    "password": "password" // Password of user
+}
+
+```
+
+
+```
+POST /api/auth/login - Users to login and obtain a JSON web token to be used as Authorization header on protected routes
+{
+  "email": "jasolajohn@gmail.com",
+  "password": "password"
+}
+
+```
+
+### Users /api/users - Protected Routes
+- The Header must have an Authorization header with Bearer and the jwt token
+
+```
+GET /api/users - It returns all users on the platform with an array of users displaying their name, email and role
+{
+
+} 
+```
+
+```
+GET /api/users/:userId - It returns the specified user with the userId as the parameter from the endpoint.
+{
+
+}
+```
+
+```
+PATCH /api/users/:userId - User can change their name as specified if they are logged in with their account
+```
+
+
+
+
+### Task - /api/tasks - Protected routes
+
+
+
 
 ## License
 
