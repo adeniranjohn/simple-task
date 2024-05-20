@@ -11,6 +11,10 @@ export class TaskDTO {
   @IsNumber()
   priority: number;
 
+  @IsOptional()
+  @IsString()
+  assignedTo: string;
+
   @IsString()
   description: string;
 }

@@ -10,11 +10,33 @@ export class TasksService {
   constructor(@InjectModel(Task.name) private taskModel: Model<Task>) {}
 
   async getTasks(): Promise<Task[]> {
-    return await this.taskModel.find({});
+    return await this.taskModel
+      .find({})
+      .populate({
+        path: 'assignedBy',
+        model: 'User',
+        select: 'name email role',
+      })
+      .populate({
+        path: 'assignedTo',
+        model: 'User',
+        select: 'name email role',
+      });
   }
 
   async getTask(taskId: string): Promise<ITask> {
-    const task = await this.taskModel.findOne({ _id: taskId });
+    const task = await this.taskModel
+      .findOne({ _id: taskId })
+      .populate({
+        path: 'assignedBy',
+        model: 'User',
+        select: 'name email role',
+      })
+      .populate({
+        path: 'assignedTo',
+        model: 'User',
+        select: 'name email role',
+      });
     if (task) {
       return task;
     } else {
@@ -23,9 +45,20 @@ export class TasksService {
   }
 
   async updateTask(taskId: string, updates: { status: Status }) {
-    return await this.taskModel.findByIdAndUpdate(taskId, updates, {
-      new: true,
-    });
+    return await this.taskModel
+      .findByIdAndUpdate(taskId, updates, {
+        new: true,
+      })
+      .populate({
+        path: 'assignedBy',
+        model: 'User',
+        select: 'name email role',
+      })
+      .populate({
+        path: 'assignedTo',
+        model: 'User',
+        select: 'name email role ',
+      });
   }
 
   async createTask(task: TaskDTO, userId: string) {

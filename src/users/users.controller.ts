@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Delete,
   Get,
@@ -40,9 +41,17 @@ export class UsersController {
   }
 
   @Patch(':userId')
-  async updateUser(@Req() req: RequestUser, updates: UpdateUserDTO) {
+  async updateUser(
+    @Req() req: RequestUser,
+    @Param() param: { userId: string },
+    @Body() updates: UpdateUserDTO,
+  ) {
     try {
-      return await this.userService.updateUser(req.user.id, updates);
+      if (req.user.id === param.userId) {
+        return await this.userService.updateUser(req.user.id, updates);
+      } else {
+        throw new Error(`You can only update logged in User`);
+      }
     } catch (error) {
       throw new Error(error.message);
     }

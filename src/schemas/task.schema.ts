@@ -29,6 +29,12 @@ export class Task {
   assignedBy: User;
 
   @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  })
+  assignedTo: User;
+
+  @Prop({
     required: true,
     default: 1,
   })

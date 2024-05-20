@@ -53,7 +53,12 @@ export class UsersService {
 
   async updateUser(userId: string, updates: UpdateUserDTO) {
     try {
-      return this.userModel.findByIdAndUpdate(userId, updates, { new: true });
+      console.log(updates);
+      return await this.userModel
+        .findByIdAndUpdate(userId, updates, {
+          new: true,
+        })
+        .select('-password');
     } catch (error) {
       throw new Error(error.message);
     }
