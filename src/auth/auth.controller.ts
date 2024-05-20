@@ -4,6 +4,7 @@ import { IUser } from 'src/users/interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { UserDTO } from 'src/users/dtos/user.dto';
+import { StreamerGateway } from 'src/streamer/streamer.gateway';
 
 @Controller('api/auth')
 export class AuthController {
@@ -11,6 +12,7 @@ export class AuthController {
     private authService: AuthService,
     private jwtService: JwtService,
     private userService: UsersService,
+    private readonly streamer: StreamerGateway,
   ) {}
 
   @Post('login')
@@ -37,6 +39,9 @@ export class AuthController {
           `User with email: ${body.email} already existed`,
         );
       } else {
+        this.streamer.streamMessage(
+          `User with email:${body.email} just joined the platform`,
+        );
         return await this.userService.register(body);
       }
     } catch (err) {

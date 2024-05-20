@@ -4,10 +4,14 @@ import { Model } from 'mongoose';
 import { Status, Task } from 'src/schemas/task.schema';
 import { ITask } from './interfaces/task.interface';
 import { TaskDTO } from './dtos/task.dto';
+import { StreamerGateway } from 'src/streamer/streamer.gateway';
 
 @Injectable()
 export class TasksService {
-  constructor(@InjectModel(Task.name) private taskModel: Model<Task>) {}
+  constructor(
+    @InjectModel(Task.name) private taskModel: Model<Task>,
+    private readonly streamer: StreamerGateway,
+  ) {}
 
   async getTasks(): Promise<Task[]> {
     return await this.taskModel
@@ -62,7 +66,13 @@ export class TasksService {
   }
 
   async createTask(task: TaskDTO, userId: string) {
-    return await this.taskModel.create({ ...task, assignedBy: userId });
+    const newTask = await this.taskModel.create({
+      ...task,
+      assignedBy: userId,
+    });
+    this.streamer.streamMessage(`Newly created Task`);
+    this.streamer.streamTask(newTask);
+    return newTask;
   }
 
   async deleteTask(taskId: string) {

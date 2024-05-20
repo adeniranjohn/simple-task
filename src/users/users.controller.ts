@@ -15,11 +15,15 @@ import { UpdateUserDTO } from './dtos/updates.dto';
 import { IUser } from './interfaces/user.interface';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RequestUser } from './interfaces/request.user.interface';
+import { StreamerGateway } from 'src/streamer/streamer.gateway';
 
 @Controller('api/users')
 @UseGuards(JwtAuthGuard)
 export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly userService: UsersService,
+    private readonly streamer: StreamerGateway,
+  ) {}
 
   @Get()
   async getUsers() {

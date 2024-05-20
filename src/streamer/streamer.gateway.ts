@@ -26,15 +26,15 @@ export class StreamerGateway {
     this.io.emit(`Message`, `Number of connected clients: ${sockets.size}`);
   }
 
-  streamTask(client: Socket, task: ITask) {
+  streamTask(task: ITask) {
     this.io.emit('Task', task);
   }
 
-  streamUser(client: Socket, user: IUser) {
+  streamUser(user: IUser) {
     this.io.emit('User', user);
   }
 
-  streamMessage(client: Socket, message: string) {
+  streamMessage(message: string) {
     this.io.emit('Message', message);
   }
 }
