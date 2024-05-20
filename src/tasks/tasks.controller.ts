@@ -17,11 +17,15 @@ import {
   RequestUser,
 } from 'src/users/interfaces/request.user.interface';
 import { UpdateTaskDTO } from './dtos/updateTask.dto';
+import { StreamerGateway } from 'src/streamer/streamer.gateway';
 
 @Controller('api/tasks')
 @UseGuards(JwtAuthGuard)
 export class TasksController {
-  constructor(private tasksService: TasksService) {}
+  constructor(
+    private tasksService: TasksService,
+    private readonly streamer: StreamerGateway,
+  ) {}
   @Post()
   async createTask(@Body() body: TaskDTO, @Req() req: RequestUser) {
     const user: Payload | undefined = req.user;
